@@ -1,0 +1,4 @@
+Comparison of classifiers on haandwritten digits 
+
+https://ieeexplore.ieee.org/abstract/document/576879/
+
