@@ -2,7 +2,7 @@
 \usepackage{cite}
 \usepackage{amsmath}
 \usepackage[ruled,linesnumbered]{algorithm2e}	
-
+\usepackage{hyperref}
 \title{Implementation and Empirical Analysis of Modifications to the Stochastic Gradient Descent Optimizer}
 \author{Kenan Karavoussanos}
 \begin{document}
@@ -51,7 +51,7 @@
 	
 	\paragraph{Organisation of the rest of the proposal}
 	
-	A literature survey,
+	The
 	Methodology 1 which describes analytical aspects of work,
 	MEthodology 2 which describes implementation of work and new algorithms and describes comparison order.
 	Experimental setup/Computational Setup describe my machine, the development environment and packages
@@ -158,14 +158,9 @@ Doing this improves the ability of the optimizer to avoid local minima by allowi
 
 \subsubsection{Dataset}
 
-The Dataset the ANN will be tested on is the Extended MNIST dataset. It is a dataset of 18800 28x28 pixel images of handwritten letters a-z and digts 0-9. The classes are evenly distributed thus the dataset is considered balanced. The full dataset is available on the github page for this work. 
+The Dataset the ANN will be trained on is the Extended MNIST balanced training set. It is a dataset of 112800 28x28 pixel images of handwritten letters both capitalized and uncapitalized(with letters whose capitalized and uncapitalized versions are indistinguishable reduced to one class), and digits 0-9. In total there are 47 distinct classes of images. The classes are evenly distributed thus the dataset is considered balanced.
 
-The data shall be randomly split as follows:
-\begin{itemize}
-	\item 60\% Training Data: This data is used during the learning process.
-	\item 20\% Validation Data: This data is used to tune and test for hyperparameter values.
-	\item 20\% Test Data: This data is used for unbiased evaluation of the networks performance. This data is not seen by thee network until the testing phase. The performance metrics for each Optimizer will be based solely on the performance on this set.
-\end{itemize}
+The Dataset the ANN will be tested on is the Extended MNIST balanced test set. It is similar to the above training set however there are only 18800 images.
 
 \subsubsection{Architecture}
 
@@ -344,7 +339,7 @@ where
 	\boldsymbol{G}_{t+1} = \boldsymbol{G}_{t} + \boldsymbol{g}_{t}^{\circ{2}}
 	\end{equation} 
 	
-	\item $\epsilon\boldsymbol{I}$ is a smoothing matrix to prevent division by zero.
+	\item $\epsilon\boldsymbol{I}$ is a smoothing matrix where all elements are a small number $\epsilon$ to prevent division by zero.
 	
 	\item $\circ$ is the Hadamard power operator
 \end{itemize}
@@ -362,7 +357,7 @@ The vectorized update rule is identical to that of ADAGRAD except in this case $
 \boldsymbol{G}_{t+1} = \frac{1}{t+1}[t\boldsymbol{G}_{t} + \boldsymbol{g}_{t}^{\circ{2}}]
 \end{equation}
 \paragraph{Adam}
-Adam combines the benefits of keeping the RMS of the past squared gradients, the variance, as well as a running average of past gradients, the mean. The first moment term acts as a momentum term as it is a direction preserving exponentially decaying average of previous gradients.
+Adam combines the benefits of keeping the RMS of the past gradients, the variance, as well as a running average of past gradients, the mean. The first moment term acts as a momentum term as it is a direction preserving exponentially decaying average of previous gradients.
 
 The vectorized update rule for Adam is given by:
 
@@ -391,13 +386,110 @@ and,
 \boldsymbol{v}_{t+1} = \beta_2\boldsymbol{v}_{t} + (1-\beta_2)\boldsymbol{g}_{t+1}^{\circ2}
 \end{equation}
 \subsubsection{Contrast with previous work}
-\section{Analytic Results to be used}	
-	
+
+The current work differs from previous work mainly due to the aggregation of various Optimizers that have not been compared in a single source. Additionally, the comparison metrics used in this work extend the comparisons made in previous research. The use of the EMNIST database extends previous comparisons made with the standard MNIST database.
+
+\section{Analytic Results to be used}
+This Section shall provide derivations for the newly vectorized update rules for the ADAGRAD, RMSPROP and Adam Optimizers. It will be shown that given the $M \times N$ update matrix, each element, $\boldsymbol{\theta}_{i,j}$,  in the matrix is the single parameter update rule for that optimizer.
+
+\subsection{ADAGRAD and RMSProp}
+\subsubsection{Derivation}
+Given the vectorized update rule: \hfill\newline
+
+$\boldsymbol{\Delta{\theta}} = -\alpha\boldsymbol{g}\oslash[\epsilon\boldsymbol{I} + \boldsymbol{G}]^{\circ\frac{1}{2}} \hfill\newline\newline\iff \boldsymbol{\Delta{\theta}} =  -\alpha\begin{bmatrix}
+g_{11}  & \dots  & g_{1n} \\
+\vdots  & \ddots & \vdots \\
+g_{m1}  & \dots  & g_{mn}
+\end{bmatrix}\oslash\left(\begin{bmatrix}
+\epsilon  & \dots  & \epsilon \\
+
+\vdots  & \ddots & \vdots \\
+\epsilon  & \dots  & \epsilon
+\end{bmatrix} + \begin{bmatrix}
+G_{11} &\dots  & G_{1n} \\
+\vdots  &\ddots & \vdots \\
+G_{m1}  &\dots  & G_{mn}
+\end{bmatrix}\right)^{\circ\frac{1}{2}} \hfill\newline\newline\iff  \boldsymbol{\Delta{\theta}} = -\alpha\begin{bmatrix}
+g_{11}  & \dots  & g_{1n} \\
+\vdots  & \ddots & \vdots \\
+g_{m1}  & \dots  & g_{mn}
+\end{bmatrix}\oslash\begin{bmatrix}
+\sqrt{\epsilon + G_{11}} & \dots  & \sqrt{\epsilon + G_{1n}} \\
+\vdots & \ddots & \vdots \\
+\sqrt{\epsilon + G_{m1}}  &\dots  & \sqrt{\epsilon + G_{mn}}
+\end{bmatrix} \hfill\newline\newline\iff \boldsymbol{\Delta{\theta}} = \begin{bmatrix}
+-\alpha\frac{g_{11}}{\sqrt{\epsilon + G_{11}}}  & \dots  & -\alpha\frac{g_{1n}}{\sqrt{\epsilon + G_{1n}}}  \\
+\vdots  & \ddots & \vdots \\
+-\alpha\frac{g_{m1}}{\sqrt{\epsilon + G_{m1}}}   & \dots  & -\alpha\frac{g_{mn}}{\sqrt{\epsilon + G_{mn}}} 
+\end{bmatrix}
+$ \hfill\newline\newline
+Thus $\boldsymbol{\Delta{\theta}}_{ij} = -\alpha\frac{g_{i,j}}{\sqrt{\epsilon + G_{ij}}} $
+\subsubsection{Analysis}
+The benefit of using this vectorized equation is that all operations are element-wise algebraic operations. As such, the equation is simple to understand for the reader and programmatic implementation is also simple. The presence of an interchangeable normalization matrix, $\boldsymbol{G}_{t+1}$ , allows various other normalizations (other than Sum of Squared Gradients and the RMS of Gradients) to be easily implemented without having to derive a new vectorized equation. 
+
+\subsection{Adam}
+\subsubsection{Derivation}
+
+Given the vectorized update rule: \hfill\newline
+
+$\boldsymbol{\Delta{\theta}} = -\alpha\boldsymbol{\hat{m}}\oslash{[\epsilon\boldsymbol{I} +\boldsymbol{\hat{v}}^{\circ\frac{1}{2}}]}\hfill\newline\newline\iff \boldsymbol{\Delta{\theta}} =  -\alpha\begin{bmatrix}
+\hat{m}_{11}  & \dots  & \hat{m}_{1n} \\
+\vdots  & \ddots & \vdots \\
+\hat{m}_{m1}  & \dots  & \hat{m}_{mn}
+\end{bmatrix}\oslash\left(\begin{bmatrix}
+\epsilon  & \dots  & \epsilon \\
+
+\vdots  & \ddots & \vdots \\
+\epsilon  & \dots  & \epsilon
+\end{bmatrix} + \begin{bmatrix}
+\hat{v}_{11} &\dots  & \hat{v}_{1n} \\
+\vdots  &\ddots & \vdots \\
+\hat{v}_{m1}  &\dots  & \hat{v}_{mn}
+\end{bmatrix}^{\circ\frac{1}{2}}\right) \hfill\newline\newline\iff  \boldsymbol{\Delta{\theta}} = -\alpha\begin{bmatrix}
+\hat{m}_{11}  & \dots  & \hat{m}_{1n} \\
+\vdots  & \ddots & \vdots \\
+\hat{m}_{m1}  & \dots  & \hat{m}_{mn}
+\end{bmatrix}\oslash\begin{bmatrix}
+\epsilon + \sqrt{\hat{v}_{11}} & \dots  & \epsilon + \sqrt{\hat{v}_{1n}} \\
+\vdots & \ddots & \vdots \\
+\epsilon + \sqrt{\hat{v}_{m1}}  &\dots  & \epsilon + \sqrt{\hat{v}_{mn}}
+\end{bmatrix} \hfill\newline\newline\iff \boldsymbol{\Delta{\theta}} = \begin{bmatrix}
+-\alpha\frac{\hat{m}_{11}}{\epsilon + \sqrt{\hat{v}_{11}}}  & \dots  & -\alpha\frac{\hat{m}_{1n}}{\epsilon + \sqrt{\hat{v}_{1n}}}  \\
+\vdots  & \ddots & \vdots \\
+-\alpha\frac{\hat{m}_{m1}}{\epsilon + \sqrt{\hat{v}_{m1}}}   & \dots  & -\alpha\frac{\hat{m}_{mn}}{\epsilon + \sqrt{\hat{v}_{mn}}} 
+\end{bmatrix}
+$ \hfill\newline\newline
+Thus $\boldsymbol{\Delta{\theta}}_{ij} = -\alpha\frac{\hat{m}_{ij}}{\epsilon + \sqrt{\hat{v}_{ij}}}  $
+\subsubsection{Analysis}
+Given the fact that $\epsilon < 1$ and that it is no longer square rooted. It can be deduced that the magnitude of smoothing used in this method is less than that of the other Adaptive Gradient Methods in this work. This is possibly due to the fact that, there is already a bias correction to prevent the $\hat{v}_{ij}$ term from being zero. So having the usual magnitude of smoothing may further bias the term away from zero, which is undesirable.
+
 \section{Experimental Setup and Computational Model}
-\section{Preliminary Results}	
+
+This section will describe various components of the experimental setup such that the experiment can be repeated and the validity of claims made in future components of this work can be tested.
+
+\subsection{Computational Environment}
+\subsubsection{Hardware Specification}
+\begin{itemize}
+	\item: CPU: Intel(R) Core(TM) i5-3570k CPU @ 3.4-3.8 GHz
+	\item  GPU: AMD Radeon HD 5700 Series
+	\item  RAM: 4GB
+\end{itemize}
+\subsection{Computational Model}
+\begin{itemize}
+	\item Artificial Neural Network
 	
-\section{Further Work to be completed}
-\section{Validation, Expected Results and Exceptions}	
+\end{itemize}
+\subsubsection{Software and Versions}
+\begin{itemize}
+	\item Operating System: Windows 10
+	\item Python v3.6.0
+	\item numpy v1.14.3
+	\item sympy v1.1.1
+\end{itemize}
+
+\subsection{Data Sources}
+The data can be obtained from the \href{}{Github repository} for this work. 
+	
 	
 \section{Summary}
 
