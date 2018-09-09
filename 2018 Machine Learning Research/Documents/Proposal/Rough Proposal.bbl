@@ -1,0 +1,80 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ciresan et~al.(2010)Ciresan, Meier, Gambardella, and
+  Schmidhuber]{deepsimpleMLP}
+Dan~Claudiu Ciresan, Ueli Meier, Luca~Maria Gambardella, and J{\"{u}}rgen
+  Schmidhuber.
+\newblock Deep big simple neural nets excel on handwritten digit recognition.
+\newblock \emph{CoRR}, abs/1003.0358, 2010.
+
+\bibitem[Darken and Moody(1991)]{darken1991note}
+Christian Darken and John~E Moody.
+\newblock Note on learning rate schedules for stochastic optimization.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  832--838, 1991.
+
+\bibitem[Duchi et~al.(2011)Duchi, Hazan, and Singer]{duchi2011adaptive}
+John Duchi, Elad Hazan, and Yoram Singer.
+\newblock Adaptive subgradient methods for online learning and stochastic
+  optimization.
+\newblock \emph{Journal of Machine Learning Research}, 12\penalty0
+  (Jul):\penalty0 2121--2159, 2011.
+
+\bibitem[Haykin(1999)]{ANNDefinition}
+S.~Haykin.
+\newblock Neural networks: A comprehensive foundation.
+\newblock \emph{find just now}, 1:\penalty0 24--24, 1999.
+
+\bibitem[Hornik et~al.(1989)Hornik, Stinchcombe, and White]{Hornik1989}
+Kurt Hornik, Maxwell~B. Stinchcombe, and Halbert White.
+\newblock Multilayer feedforward networks are universal approximators.
+\newblock \emph{Neural Networks}, 2:\penalty0 359--366, 1989.
+
+\bibitem[Kingma and Ba(2014)]{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[LeCun et~al.(1998)LeCun, Bottou, Bengio, and
+  Haffner]{lecun1998gradient}
+Yann LeCun, L{\'e}on Bottou, Yoshua Bengio, and Patrick Haffner.
+\newblock Gradient-based learning applied to document recognition.
+\newblock \emph{Proceedings of the IEEE}, 86\penalty0 (11):\penalty0
+  2278--2324, 1998.
+
+\bibitem[Panchal and Panchal(2014)]{panchal2014review}
+G~Panchal and Mahesh Panchal.
+\newblock Review on methods of selecting number of hidden nodes in artificial
+  neural network.
+\newblock \emph{International Journal of Computer Science and Mobile
+  Computing}, 3\penalty0 (11):\penalty0 455--464, 2014.
+
+\bibitem[Ruder(2016)]{ruder2016overview}
+Sebastian Ruder.
+\newblock An overview of gradient descent optimization algorithms.
+\newblock \emph{arXiv preprint arXiv:1609.04747}, 2016.
+
+\bibitem[Rumelhart et~al.(1986)Rumelhart, Hinton, and
+  Williams]{backpropagationOriginal}
+David~E Rumelhart, Geoffrey~E Hinton, and Ronald~J Williams.
+\newblock Learning representations by back-propagating errors.
+\newblock \emph{nature}, 323\penalty0 (6088):\penalty0 533--536, 1986.
+
+\bibitem[Simard et~al.(2003)Simard, Steinkraus, and Platt]{Simard2003BestPF}
+Patrice~Y. Simard, David Steinkraus, and John~C. Platt.
+\newblock Best practices for convolutional neural networks applied to visual
+  document analysis.
+\newblock In \emph{ICDAR}, 2003.
+
+\bibitem[Smith(2017)]{smith2017cyclical}
+Leslie~N Smith.
+\newblock Cyclical learning rates for training neural networks.
+\newblock In \emph{Applications of Computer Vision (WACV), 2017 IEEE Winter
+  Conference on}, pages 464--472. IEEE, 2017.
+
+\end{thebibliography}

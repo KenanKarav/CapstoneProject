@@ -1,8 +1,18 @@
 \documentclass{article}
-\usepackage{cite}
+\usepackage[numbers]{natbib}
 \usepackage{amsmath}
 \usepackage[ruled,linesnumbered]{algorithm2e}	
+\usepackage{multirow}
 \usepackage{hyperref}
+\usepackage{float}
+\usepackage{xcolor}
+\hypersetup{
+	colorlinks,
+	linkcolor=blue,
+	filecolor = blue,
+	citecolor=red,
+	urlcolor=blue
+}
 \title{Implementation and Empirical Analysis of Modifications to the Stochastic Gradient Descent Optimizer}
 \author{Kenan Karavoussanos}
 \begin{document}
@@ -36,7 +46,7 @@
 	\end{enumerate}
 
 
-	Due to the large amount of computation and calculation required to train an ANN, it is infeasible to trace the training algorithm for more than a few training examples. As such various metrics are used to evaluate the performance of the ANN and its Optimizer. Slow optimizers become prohibitive to training for large datasets so time to convergence has been chosen as a comparison metric. The level of generalization of the network has been chosen as a broad metric to be tested with specific metrics such as accuracy and precision, amongst others. 
+	Due to the large amount of computation and calculation required to train an ANN, it is infeasible to trace the training algorithm for more than a few training examples. As such various metrics are used to evaluate the performance of the ANN and its Optimizer. Slow optimizers become prohibitive to training for large datasets so time to convergence has been chosen as a comparison metric. This time to converge shall be measured in two manners: wall clock time as well as number of iterations to convergence. The level of generalization of the network is the most important broad metric in the evaluation of a classifier, thus the accuracy has also been chosen as a metric. 
 	
 	\paragraph{Significance of problem}
 	The current body of research shows the benefits of each new optimizer and how it overcomes specific limitations. However, the trade-offs are rarely specifically studied and as such this paper serves as a means to correct the selection bias in the body of research. 
@@ -51,43 +61,36 @@
 	
 	\paragraph{Organisation of the rest of the proposal}
 	
-	The
-	Methodology 1 which describes analytical aspects of work,
-	MEthodology 2 which describes implementation of work and new algorithms and describes comparison order.
-	Experimental setup/Computational Setup describe my machine, the development environment and packages
-	also describe piecewise individual testing then combination into named optimizers and combined unnamed optimisers.
-	Describe Dataset in Detail 
-	Discuss use of GIT, OO Design, public access to repo and how to run code.
-	
-	preliminary results before moving to full research plan.
-	validation of results
-	describe limitation of results and how to extend current results.
+	The proposal shall consist of a literature survey which analyses the current body of literature that is directly relevant to the current work. Then the Methodology which is split into two sections:
+	Methodology-I which describes basic concepts of the work as well as the experimental setup including basic pseudocoded algorithms. Methodology 2 which describes newly developed vectorization of certain optimizers. Followed by the Experimental/Computational Setup describing the hardware and software specification of the experimental environment. The data sources and software engineering principles to be used in the future work are also described.
 	
 	
 \section{Literature Survey}	
 The following literature review seeks to critically evaluate the current evaluations of various prolific optimizers used in Artificial Neural Networks. In particular, the benefits of each optimizer in comparison to others as well as the discussed trade-offs of the optimizer. The time to convergence as well as level of generalization will be the comparison metrics discussed.
 
 
-(Kingma et al 2015) provides an unbiased empirical evaluation of the Adam Optimizer with respect to other optimizers. Adam can be described as a combination of RMSProp, Momentum and a bias-correction term.
+\paragraph{}~\citet{kingma2014adam} provides an unbiased empirical evaluation of the Adam Optimizer with respect to other optimizers. Adam can be described as a combination of RMSProp, Momentum and a bias-correction term.
 Multiple statistics are used for the comparison and shows that Adam is faster to converge than all the other tested optimizers, however it is admitted that Adam tends to over-fit to the training data so regularization and dropout strategies were used to improve generalization. For a Multi-layer Neural Network with dropout stochastic regularization, the training cost versus iteration number is reported for multiple Optimizers. However, the generalization of these optimizers, along our chosen metrics is not reported.
 
-
-(S Ruder 2016) provides an overview of various gradient based optimizers and their specific limitations. However the overview is wholly theoretical and does not report any empirical statistics in its analysis.
+\paragraph{}~\citet{ruder2016overview} provides an overview of various gradient based optimizers and their specific limitations. However the overview is wholly theoretical and does not report any empirical statistics in its analysis.
 Provided derivations of each optimizer have been used in the current work for the development of the algorithms used in each  A visualization of some of the discussed optimizers is provided but this does not specifically pertain to the domain of our problem as the visualized objective functions are the Beale Function and a hyperparaboloid. It is important to note the poor performance around saddle points of the optimizers with static learning rates.
 
-(C Darken et all, 199x) discusses learning rate schedules as a solution to a static learning rate as well as introduces the Search-Then-Converge (STC) Method. A major limitation to learning rate schedules discussed is that the learning rate decreases too quickly so convergence is not guaranteed. STC attempts to solve this problem by slowing down this reduction in learning rate and then increasing the reduction once a certain time threshold has been reached. This gives the optimizer time to \textit{search} for a local minimum and then \textit{converge}, hopefully, once it is found. The paper describes that this method is \textit{guaranteed} to converge, however there is no proven guarantee that the optimizer will find a local minimum within the "search" period. This bias warrants that further investigation be reported in the current work to validate the claims of this paper.
 
-(J Duchi et al, 2011) proposes the Adaptive Subgradient Method ,or ADAGRAD.The performance of this method is gauged along two metrics. The online error as well as the test set performance of the resultant classifier after one learning epoch. Various other adaptive gradient methods are tested for comparison and it is shown that ADAGRAD is the best optimizer to use when the training data is sparse. However, for small datasets, ADAGRAD is beat by the AROW algorithm. It is also shown that, on MNIST classification, the error rate for ADAGRAD is 0.4\% greater than that of the Passive-Aggressive Algorithm. The version of ADAGRAD tested in this paper involves the use of Regularised Dual Averaging and thus differs from the ADAGRAD version to be tested in the current work.
+\paragraph{}~\citet{darken1991note} discusses learning rate schedules as a solution to a static learning rate as well as introduces the Search-Then-Converge (STC) Method. A major limitation to learning rate schedules discussed is that the learning rate decreases too quickly so convergence is not guaranteed. STC attempts to solve this problem by slowing down this reduction in learning rate and then increasing the reduction once a certain time threshold has been reached. This gives the optimizer time to \textit{search} for a local minimum and then \textit{converge}, hopefully, once it is found. The paper describes that this method is \textit{guaranteed} to converge, however there is no proven guarantee that the optimizer will find a local minimum within the "search" period. This bias warrants that further investigation be reported in the current work to validate the claims of this paper.
 
-(L smith 2017) proposes  the use of cyclical learning rates as opposed to adaptive learning rates. Cyclical learning rates (CLR) are shown to have less computational cost than other adaptive methods.
+\paragraph{}~\citet{duchi2011adaptive} proposes the Adaptive Subgradient Method ,or ADAGRAD.The performance of this method is gauged along two metrics. The online error as well as the test set performance of the resultant classifier after one learning epoch. Various other adaptive gradient methods are tested for comparison and it is shown that ADAGRAD is the best optimizer to use when the training data is sparse. However, for small datasets, ADAGRAD is beat by the AROW algorithm. It is also shown that, on MNIST classification, the error rate for ADAGRAD is 0.4\% greater than that of the Passive-Aggressive Algorithm. The version of ADAGRAD tested in this paper involves the use of Regularised Dual Averaging and thus differs from the ADAGRAD version to be tested in the current work.
+
+\paragraph{}~\citet{smith2017cyclical} proposes  the use of cyclical learning rates as opposed to adaptive learning rates. Cyclical learning rates (CLR) are shown to have less computational cost than other adaptive methods.  The accuracy at 25000 and 70000 training iterations is used as a comparison metric for the different optimizers tested.
 The method involves sampling a periodic function which is bounded by a maximum and minimum learning rate. This prevents the learning rate from monotonically decreasing as in ADAGRAD or other learning rate scheduling techniques. This improves the performance of the optimizer around saddle points. Selecting a minimum and maximum learning rate as well as the cycle length of the periodic function is covered by a selection of tests contained within the paper. 
 
-An interesting result in the paper shows that when using CLR with a gradient acceleration method, The Nesterov Method, it took only 25000 training iterations to achieve accuracy similar to the regular Nesterov Method after 70000 iterations. Similarly, RMSProp with CLR achieves the same improvement. However, when CLR is used in conjunction with the Adam Optimizer, the performance is worse than the regular Adam Optimizer. This suggests some conflict with either the Momentum Method or the bias correction term in the Adam Optimizer. 
+\paragraph{}An interesting result in the paper shows that when using CLR with a gradient acceleration method, The Nesterov Method, it took only 25000 training iterations to achieve accuracy similar to the regular Nesterov Method after 70000 iterations. Similarly, RMSProp with CLR achieves the same improvement. However, when CLR is used in conjunction with the Adam Optimizer, the performance is worse than the regular Adam Optimizer. This suggests some conflict with CLR and either the first-moment term, the bias correction or both in the Adam Optimizer.
 
-The only generalization metric tested is the accuracy. This does not provide a holistic view of the generalization of the method. As such the current work will report the generalization along multiple metrics.  
-	
-
-
+ \paragraph{}~\citet{Simard2003BestPF} describes the best practices for Convolutional Neural Networks. In particular using elastic deformation to increase the number of training examples is suggested as a standard for CNN training. It is shown that elastic deformation produces better generalization of the network when compared to affine deformation which in turn is better than no deformation. These methods may potentially be used if the network overfits the training data. This is a computationally expensive method to prevent overfitting when compared to regularization or dropout methods. However, the distortion can be precomputed and reused for various experiments which could potentially save computation time across all experiments in this work. Although this article describes best practices for CNN's this best practice applies to our domain as the dataset is the same.
+ 
+ \paragraph{} ~\citet{lecun1998gradient} compares various types of classifiers on the MNIST database. A MLP with one hidden layer achieved a $4.7\%$ test error with 300 hidden units and $4.5\%$ for a network with 1000 hidden units. This marginal improvement for a large increase in hidden units suggests that the network with 1000 units was overfit i.e poorly generalized, thus the increase in units past a certain threshold between 300 and 1000 increases test error. Alternatively, the increase in number of hidden units could follow a law of diminishing returns and thus while adding units does not increase test error, doing so may not strictly decrease test error. Irrespective of which case holds, it can be seen that arbitrarily adding hidden units does not significantly improve test error and thus other guidelines such as computational time should be considered when deciding on network architecture. A similar pattern holds for a network with two hidden layers.
+ 
+ \paragraph{}~\citet{deepsimpleMLP} evaluate the effect of the number of layers and number of neurons per layer in a Multilayer Perceptron(MLP) Artificial Neural Network when classifying Handwritten Digits. Training examples were distorted using elastic and affine deformations. This distortion was used to artificially increase the number of training examples by distorting all training images in each training epoch. GPU acceleration was used to reduce the training time for each network. The performance of each architecture was measured primarily via the minimum test error achieved at each training epoch. While trialling various architectures the best minimum test error was achieved by a network with 5 hidden layers with 2500,2000,1500,1000,500,10-architecture at $0.32\%$ error. However the training time required to achieve this result was 114.5 hours. A two layer MLP with 1000,500,10-architecture achieved $0.44\%$ error on the test set while only taking 23.4 hours of training time. 
+ 
  
 
   
@@ -101,7 +104,7 @@ The only generalization metric tested is the accuracy. This does not provide a h
 \subsection{Methodology-I}
 This section provides an overview of the concepts involved in the preliminary work, a detailed explanation of each concept, the equations to be used throughout the preliminary work and the pseudo-code of the learning process with the SGD optimizer. 
 \subsubsection{Detailed Concepts}
-\paragraph{Artificial Neural Network}~\cite{ANNDefinition} defines an Artificial Neural Network as a massively distributed and parallelized processor made up of small computational units called Neurons that acquires knowledge from its environment through a learning process and stores this knowledge as synaptic weights between neurons. 
+\paragraph{Artificial Neural Network} An Artificial Neural Network(ANN) is defined as a massively distributed and parallelized processor made up of small computational units called Neurons that acquires knowledge from its environment through a learning process and stores this knowledge as synaptic weights between neurons ~\cite{ANNDefinition}. 
 
 A Neuron takes external data or data from other neurons as input. Each input is multiplied by its respective synaptic weight and then all of these are added up to produce a single value called the activation[need reference] this activation is then passed as input into a non-linear activation function which produces an output which either goes to another Neuron or goes to the output of the network.
 
@@ -130,7 +133,7 @@ where the weight update, $\Delta\theta_{ji}$, is given by:
  
 
  $\alpha$ is the learning rate and $\frac{\partial{J}(\theta)}{\partial{\theta_{ji}}}$ is the gradient of the error function with respect to $\theta_{ji}$.
-$\frac{\partial{J}(\theta)}{\partial{\theta_{ji}}}$ is calculated using the backpropagation algorithm~\cite{backpropagationOriginal]}.
+$\frac{\partial{J}(\theta)}{\partial{\theta_{ji}}}$ is calculated using the backpropagation algorithm ~\cite{backpropagationOriginal}.
 
  
 \paragraph{Learning Rate}
@@ -139,7 +142,7 @@ The Learning Rate of an ANN can be defined as the rate at which parameters chang
 
 The value of the Learning Rate is crucial to the convergence of the network. Too low of a learning rate and the time to convergence becomes exceedingly high. Too high of a learning rate and the network may fail to converge due to continually stepping over the minimum. The Learning Rate can be global to all weights in the network or local to individual or groups of weights. Additionally, the learning rate can be static for the entire learning process or can be adaptive throughout the learning process.  
 \paragraph{Momentum}
-The Momentum Method is an acceleration method ~\cite{backpropagationOriginal} used to overcome sudden changes in gradient, that are common around minima, and reduce the time to convergence by setting the next weight update equal to a linear combination of:
+The Momentum Method is an acceleration method \cite{backpropagationOriginal} used to overcome sudden changes in gradient, that are common around minima, and reduce the time to convergence by setting the next weight update equal to a linear combination of:
 \begin{enumerate}
 	\item $\frac{\partial{J}(\theta)}{\partial{\theta_{ji}}}$ the gradient of the error function with respect to $\theta_{ji}$
 	\item $\Delta\theta_{ji}$ the previous weight update.
@@ -166,13 +169,12 @@ The Dataset the ANN will be tested on is the Extended MNIST balanced test set. I
 
 \paragraph{Input Layer}
 The Architecture of our ANN will be a Multilayer Feed Forward Network with 2 hidden layers.
+It has been proven that a Neural Network with two hidden layers can approximate any bounded continuous function to arbitrary accuracy \cite{Hornik1989}. The data takes the form of 28x28 pixel images. With each pixel being an individual input we have, $\boldsymbol{N}_i$, the number of inputs equal to 784.
 
-The data takes the form of 28x28 pixel images. With each pixel being an individual input we have, $\boldsymbol{N}_i$, the number of inputs equal to 784.
-
-
+\paragraph{Hidden Layers}
  Due to the fact that all Optimizers will be run on the same network architecture the number of neurons in each hidden layer will be determined beforehand rather than via cross-validation, this prevents the architecture from being tailored to any one optimizer as well as controlling a variable in the experiment.
  
- (F Panchal et al 2014) suggest a simple approach to selecting the number of neurons in a network by providing some rules of thumb. Specifically,
+ \citet{panchal2014review} suggest a simple approach to selecting the number of neurons in a network by providing some rules of thumb. Specifically,
 \begin{enumerate}
 	\item	$\boldsymbol{N}_h\in[\boldsymbol{N}_o, \boldsymbol{N}_i]$
 	
@@ -181,15 +183,34 @@ The data takes the form of 28x28 pixel images. With each pixel being an individu
 	\item$\boldsymbol{N}_h = \frac{2}{3}\boldsymbol{N}_i + \boldsymbol{N}_o$
 \end{enumerate}
  
- However, guideline 3 results in a prohibitively large number of neurons. Thus guideline 1 and 2 will be followed and a custom strategy adopted.
- To minimize the number of neurons in the network so as to minimize computation time the following strategy has been selected:
+ Following these guidelines as well as the results in ~\cite{deepsimpleMLP} the following architecture has been proposed:
  
  \begin{equation}
- 	\boldsymbol{N}_{h1} = \boldsymbol{N}_{h2} = \boldsymbol{N}_o = 36
+ 	\boldsymbol{N}_{h1} = \boldsymbol{N}_{h2} = 600
  \end{equation}
 
-These numbers satisfy both guideline 1 and guideline 2.
+\subsubsection{Performance Metrics}
+This section describes the manner in which the various Optimizers shall be compared and evaluated.
 
+Initially, SGD will be tested and will produce the control values for comparison. The following describes the method for attaining said values:
+\begin{enumerate}
+	\item Run SGD sampling the test accuracy and wall clock time every 10000 training iterations.
+	\item Stop at 100000 iterations.
+	\item This array of sampling points will serve as control values to compare other optimizers to. 
+\end{enumerate}
+
+The use of these control values is described in the following:
+
+\begin{enumerate}
+	\item Run Optimizer and sample test accuracy and wall clock time every 10000 training iterations up or until the test accuracy is greater than or equal to the accuracy at the 100000 sample point for SGD.
+	\item Sample test error and iteration number at every wall clock time equal to the sampled wall clock times for SGD
+\end{enumerate}
+This will be reported in the matrices namely:
+\begin{itemize}
+	\item  \hyperref[sec:IvsTA]{Iteration vs Test Accuracy}
+	\item \hyperref[sec:IvsWCT]{Iteration vs Wall clock time}
+	\item \hyperref[sec:WCTvsTA]{Wall clock time vs Test Accuracy }
+\end{itemize}
 
 \subsubsection{Learning Process Algorithms}
 This section provides the pseudocoded algorithms for the learning process with the SGD optimizer, the SGD optimizer with momentum. The pseudocoded algorithms for the adaptive learning rate methods can be found in Methodology-II.
@@ -357,7 +378,7 @@ The vectorized update rule is identical to that of ADAGRAD except in this case $
 \boldsymbol{G}_{t+1} = \frac{1}{t+1}[t\boldsymbol{G}_{t} + \boldsymbol{g}_{t}^{\circ{2}}]
 \end{equation}
 \paragraph{Adam}
-Adam combines the benefits of keeping the RMS of the past gradients, the variance, as well as a running average of past gradients, the mean. The first moment term acts as a momentum term as it is a direction preserving exponentially decaying average of previous gradients.
+Adam combines the benefits of keeping a running average of past squared gradients, the variance, as well as a running average of past gradients, the mean. The first moment term acts as a momentum term as it is a direction preserving exponentially decaying average of previous gradients.
 
 The vectorized update rule for Adam is given by:
 
@@ -470,7 +491,7 @@ This section will describe various components of the experimental setup such tha
 \subsection{Computational Environment}
 \subsubsection{Hardware Specification}
 \begin{itemize}
-	\item: CPU: Intel(R) Core(TM) i5-3570k CPU @ 3.4-3.8 GHz
+	\item  CPU: Intel(R) Core(TM) i5-3570k CPU @ 3.4-3.8 GHz
 	\item  GPU: AMD Radeon HD 5700 Series
 	\item  RAM: 4GB
 \end{itemize}
@@ -488,17 +509,66 @@ This section will describe various components of the experimental setup such tha
 \end{itemize}
 
 \subsection{Data Sources}
-The data can be obtained from the \href{}{Github repository} for this work. 
-	
-	
+The data can be obtained from the \href{https://github.com/KenanKarav/CapstoneProject.git}{Github repository} for this work. Within the Datasources folder, you will find the following files:
+\begin{itemize}
+	\item emnist-balanced-mapping.txt: The mapping of class numbers to their corresponding ASCII value.
+	\item emnist-balanced-test.csv.zip: The test dataset.
+	\item emnist-balanced-train.csv.zip: The training data.
+\end{itemize}
+The training and test images consist of 28x28 pixel black and white handwritten letters and digits. Each row of the csv is a distinct image. The first column being the class number and the remaining 784 columns representing each pixel value of the image.
+
+\subsection{Software Engineering practices and Public Accessibility}
+The code will follow Object Oriented Design with a focus on modularity to aid in debugging and review of the code by the evaluator of this work. Additionally unit testing will be implemented to try limit the time until a bug is discovered. 
+
+The full source code shall be available at the \href{https://github.com/KenanKarav/CapstoneProject.git}{Github repository} for this work. This repository is publicly accessible however changes to the repository are restricted to the author(s) of this work.
 \section{Summary}
+
+Choosing an optimizer for ones problem domain and constraints takes a lot of time seeing as there is no single source of comparison for popular optimizers. This work and future work is intended to wholly and fairly compare the time and generalization performance of various popular gradient based optimizers. This shall provide the reader with an initial source of information to improve the ability of the reader to make an informed choice of optimizer. The results of this comparison are applicable across many problem domains due to the level of generality maintained during experimentation. 
 
 \section{References}	
 	
+\bibliographystyle{plainnat}
+\bibliography{mybib}
 \section{Appendices}
-\bibliography{bibliography}
-\bibliographystyle{article}
+\subsection{Tables}
+\subsubsection{Iteration versus Accuracy}
+\label{sec:IvsTA}
+	\begin{table}[H]
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|}
+			\cline{2-12}
+			& \multicolumn{1}{c|}{\multirow{2}{*}{Optimizer}} & \multicolumn{10}{c|}{Iteration Number}                                         \\ \cline{3-12} 
+			& \multicolumn{1}{c|}{}                           & 10000 & 20000 & 30000 & 40000 & 50000 & 60000 & 70000 & 80000 & 90000 & 100000 \\ \cline{2-12} 
+			& SGD                                             & 30    & 50    & 70    & 80    & 85    & 90    & 92    & 95    & 96    & 99     \\ \cline{2-12} 
+			& Momentum                                        & 40    & 60    & 80    & 85    & 88    & 90    & 99    & 99    & 99    & 99     \\ \cline{2-12} 
+		\end{tabular}
+		\caption{Mock Table of test accuracy of an Optimizer versus Iteration Number}
+	\end{table}
+\subsubsection{Iteration versus Wall clock time}
+\label{sec:IvsWCT}
+\begin{table}[H]
+	\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|}
+		\cline{2-12}
+		& \multicolumn{1}{c|}{\multirow{2}{*}{Optimizer}} & \multicolumn{10}{c|}{Iteration Number}                                         \\ \cline{3-12} 
+		& \multicolumn{1}{c|}{}                           & 10000 & 20000 & 30000 & 40000 & 50000 & 60000 & 70000 & 80000 & 90000 & 100000 \\ \cline{2-12} 
+		& SGD                                             & time1 & time2 & time3 & time4 & time5 & time6 & time7 & time8 & time9 & time10 \\ \cline{2-12} 
+		& Momentum                                        & time1 & time2 & time3 & time4 & time5 & time6 & time7 & time8 & time9 & time10 \\ \cline{2-12} 
+	\end{tabular}
+	\caption{Mock Table of wall clock time at a given iteration number for Optimizers}
+\end{table}
+\subsubsection{Wall Clock Time versus Test Accuracy}
+\begin{table}[H]
+	\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|}
+		\cline{2-12}
+		& \multicolumn{1}{c|}{\multirow{2}{*}{Optimizer}} & \multicolumn{10}{c|}{Wall Clock Time}                                                                                  \\ \cline{3-12} 
+		& \multicolumn{1}{c|}{}                           & time1     & time2     & time3     & time4     & time5     & time6     & time7     & time8     & time9     & time10     \\ \cline{2-12} 
+		& SGD                                             & accuracy1 & accuracy2 & accuracy3 & accuracy4 & accuracy5 & accuracy6 & accuracy7 & accuracy8 & accuracy9 & accuracy10 \\ \cline{2-12} 
+		& Momentum                                        & accuracy1 & accuracy2 & accuracy3 & accuracy4 & accuracy5 & accuracy6 & accuracy7 & accuracy8 & accuracy9 & accuracy10 \\ \cline{2-12} 
+	\end{tabular}
+	\caption{Mock table showing test accuracy of optimizers versus previously sampled Wall Clock Times}
+	\label{sec:WCTvsTA}
+\end{table}
 \end{document}
+
 
 
 
