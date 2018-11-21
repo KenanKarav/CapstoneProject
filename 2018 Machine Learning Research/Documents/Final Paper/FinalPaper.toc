@@ -1,0 +1,77 @@
+\contentsline {paragraph}{Abstract}{1}{section*.1}
+\contentsline {section}{\numberline {1}Definitions and Acronyms}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Glossary}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Acronyms}{4}{subsection.1.2}
+\contentsline {section}{\numberline {2}Introduction}{4}{section.2}
+\contentsline {paragraph}{Significance of problem}{5}{section*.3}
+\contentsline {paragraph}{Application of the problem solution to other domains}{5}{section*.4}
+\contentsline {paragraph}{Organisation of the rest of the proposal}{5}{section*.5}
+\contentsline {section}{\numberline {3}Methodology}{5}{section.3}
+\contentsline {paragraph}{}{5}{section*.6}
+\contentsline {subsection}{\numberline {3.1}Methodology-I}{5}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Detailed Concepts}{5}{subsubsection.3.1.1}
+\contentsline {paragraph}{Artificial Neural Network}{5}{section*.7}
+\contentsline {paragraph}{Activation Functions}{6}{section*.8}
+\contentsline {paragraph}{Loss Function}{7}{section*.9}
+\contentsline {paragraph}{Gradient Descent}{7}{section*.10}
+\contentsline {paragraph}{Learning Rate}{7}{section*.11}
+\contentsline {paragraph}{Momentum}{7}{section*.12}
+\contentsline {subsubsection}{\numberline {3.1.2}Dataset}{9}{subsubsection.3.1.2}
+\contentsline {subsubsection}{\numberline {3.1.3}Architecture}{9}{subsubsection.3.1.3}
+\contentsline {paragraph}{Input Layer}{9}{section*.13}
+\contentsline {paragraph}{Hidden Layers}{9}{section*.14}
+\contentsline {subsubsection}{\numberline {3.1.4}Performance Metrics}{9}{subsubsection.3.1.4}
+\contentsline {subsubsection}{\numberline {3.1.5}Learning Process Algorithms}{10}{subsubsection.3.1.5}
+\contentsline {paragraph}{Learning Process With SGD}{10}{section*.15}
+\contentsline {paragraph}{SGD with Momentum}{10}{section*.16}
+\contentsline {subsubsection}{\numberline {3.1.6}Learning rate schedules}{12}{subsubsection.3.1.6}
+\contentsline {paragraph}{Search-Then-Converge}{12}{section*.17}
+\contentsline {paragraph}{Cyclical Learning Rates}{12}{section*.18}
+\contentsline {subsection}{\numberline {3.2}Methodology-II}{13}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Adaptive Learning Rate Optimizers}{13}{subsubsection.3.2.1}
+\contentsline {paragraph}{Adaptive Gradient Method}{13}{section*.19}
+\contentsline {paragraph}{RMSProp}{13}{section*.20}
+\contentsline {paragraph}{Adam}{13}{section*.21}
+\contentsline {subsubsection}{\numberline {3.2.2}Contrast with previous work}{14}{subsubsection.3.2.2}
+\contentsline {section}{\numberline {4}Analytic Results to be used}{14}{section.4}
+\contentsline {subsection}{\numberline {4.1}ADAGRAD and RMSProp}{14}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Derivation}{14}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}Analysis}{15}{subsubsection.4.1.2}
+\contentsline {subsection}{\numberline {4.2}Adam}{15}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Derivation}{15}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Analysis}{15}{subsubsection.4.2.2}
+\contentsline {section}{\numberline {5}Experimental Setup and Computational Model}{16}{section.5}
+\contentsline {subsection}{\numberline {5.1}Experimental Setup}{16}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Computational Environment}{16}{subsection.5.2}
+\contentsline {subsubsection}{\numberline {5.2.1}Hardware Specification}{16}{subsubsection.5.2.1}
+\contentsline {subsection}{\numberline {5.3}Computational Model}{16}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Software and Versions}{16}{subsubsection.5.3.1}
+\contentsline {subsection}{\numberline {5.4}Data Sources}{17}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}Software Engineering practices and Public Accessibility}{17}{subsection.5.5}
+\contentsline {section}{\numberline {6}Results}{17}{section.6}
+\contentsline {subsection}{\numberline {6.1}Figures}{18}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Training Accuracy versus Iteration}{18}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Training Loss versus Iteration}{19}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Test Accuracy versus Iteration}{20}{subsection.6.4}
+\contentsline {subsubsection}{\numberline {6.4.1}Table}{20}{subsubsection.6.4.1}
+\contentsline {subsubsection}{\numberline {6.4.2}Plot}{21}{subsubsection.6.4.2}
+\contentsline {subsection}{\numberline {6.5}Test Loss versus Iteration}{22}{subsection.6.5}
+\contentsline {subsubsection}{\numberline {6.5.1}Table}{22}{subsubsection.6.5.1}
+\contentsline {subsubsection}{\numberline {6.5.2}Plot}{23}{subsubsection.6.5.2}
+\contentsline {subsection}{\numberline {6.6}Analysis}{23}{subsection.6.6}
+\contentsline {subsubsection}{\numberline {6.6.1}SGD}{23}{subsubsection.6.6.1}
+\contentsline {section}{\numberline {7}Summary}{23}{section.7}
+\contentsline {section}{\numberline {8}References}{24}{section.8}
+\contentsline {section}{\numberline {9}Appendices}{25}{section.9}
+\contentsline {subsection}{\numberline {9.1}Literature Survey}{25}{subsection.9.1}
+\contentsline {paragraph}{}{25}{section*.23}
+\contentsline {paragraph}{}{25}{section*.24}
+\contentsline {paragraph}{}{25}{section*.25}
+\contentsline {paragraph}{}{25}{section*.26}
+\contentsline {paragraph}{}{26}{section*.27}
+\contentsline {paragraph}{}{26}{section*.28}
+\contentsline {paragraph}{}{26}{section*.29}
+\contentsline {paragraph}{}{27}{section*.30}
+\contentsline {paragraph}{}{27}{section*.31}
+\contentsline {subsection}{\numberline {9.2}Tables}{27}{subsection.9.2}
+\contentsline {subsubsection}{\numberline {9.2.1}Iteration versus Accuracy}{27}{subsubsection.9.2.1}
