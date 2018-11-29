@@ -24,7 +24,7 @@
 \contentsline {paragraph}{}{7}{section*.18}
 \contentsline {section}{\numberline {3}Methodology}{7}{section.3}
 \contentsline {subsection}{\numberline {3.1}Dataset}{7}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Performance Metrics}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.2}Performance Metrics}{8}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Momentum}{8}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Learning Process Algorithms}{9}{subsection.3.4}
 \contentsline {subsubsection}{\numberline {3.4.1}Learning Process With SGD}{9}{subsubsection.3.4.1}
